@@ -4,7 +4,7 @@
 
 </center>
 
-**_Nombre:_** Adrián Herrera Brito
+**_Nombre:_** Nuhazet Correa Torres
 
 **_Curso:_** 2º de Ciclo Superior de Desarrollo de Aplicaciones Web.
 
