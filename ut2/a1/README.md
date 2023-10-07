@@ -96,15 +96,21 @@ css:
 ```
 ##### Nginx nativo
 Debemos comprobar que ruta tenemos en el archivo .conf dentro de /etc/nginx/conf.d/, en este caso vamos a usar el default.conf está así:
+
 <img src = "img/1.png">
+
 La ruta tiene estos ficheros:
+
 <img src = "img/2.png">
+
 Al abrir la página en la máquina cliente se vería así:
+
 <img src = "img/3.png">
 <img src = "img/4.png">
 
 ##### Nginx + Docker
 Primero tenemos que movernos donde queramos levantar los servicios y seguir una estructura de ficheros/directorios como la siguiente:
+
 <img src = "img/5.png">
 
 En el default.conf pondremos lo siguiente:
@@ -140,10 +146,15 @@ services:
       - ./src:/etc/nginx/html
 ```
 Pasamos los archivos al src(los esenciales son calculadora.php, styles y la carpeta img con calculadora.png dentro):
+
 <img src = "img/6.png">
+
 Levantamos los servicios:
+
 <img src = "img/7.png">
+
 Abrimos la página con el cliente:
+
 <img src = "img/8.png">
 <img src = "img/9.png">
 
