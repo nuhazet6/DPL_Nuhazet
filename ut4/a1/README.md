@@ -117,7 +117,7 @@ Route::get('/', function () {
   return view('travelroad', ['wished' => $wished, 'visited' => $visited]);
 });
  ```
-Subimos el repositorio y lo bajamos en la máquina de producción (hay que quitar del .gitignore el .env para poder compartir configuración de la base de datos entre las máquinas, además hay que ejecutar ``` composer install ``` para crear la carpeta vendor/ e instalar todas las dependencias necesarias), una vez hecho esto vamos a crear un script que se conecte por ssh a la maquina de desarrollo, haga un push del repositorio y haga el pull en producción para mantener los dos repositorios actualizados:
+Subimos el repositorio y lo bajamos en la máquina de producción (hay que ejecutar ``` composer install ``` para crear la carpeta vendor/ e instalar todas las dependencias necesarias), una vez hecho esto vamos a crear un script que se conecte por ssh a la maquina de desarrollo, haga un push del repositorio y haga el pull en producción para mantener los dos repositorios actualizados:
 (suponemos que las rutas de las aplicaciones son las mismas)
 ```
 #!/bin/bash
@@ -128,9 +128,9 @@ ssh nuhazet@nuhazet.arkania.es "
   composer install
 "
 ```
-Ahora simplemente ejecutamos el script y accedemos a la versión en producción (hay que aclarar que antes de actualizar deberíamos haber instala
+Ahora simplemente ejecutamos el script y accedemos a la versión en producción:  
 
 ![Imagen25](img/25.png)  
 
 #### ***Conclusiones***. <a name="id5"></a>
-
+La práctica es bastante útil para aprender y coger agilidad desplegando una aplicación.
