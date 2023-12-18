@@ -132,5 +132,17 @@ Ahora simplemente ejecutamos el script y accedemos a la versión en producción:
 
 ![Imagen25](img/25.png)  
 
+Por último para hacer la redirección creamos un .conf con el siguiente contenido:  
+```
+server {
+    listen 80;
+    server_name www.laravel.travelroad.nuhazet.arkania.es;
+    return 301 https://laravel.travelroad.nuhazet.arkania.es$request_uri;
+}
+```  
+y generamos un certificado con el dominio www:  
+```
+sudo certbot --nginx -d www.laravel.travelroad.nuhazet.arkania.es
+```  
 #### ***Conclusiones***. <a name="id5"></a>
 La práctica es bastante útil para aprender y coger agilidad desplegando una aplicación.
