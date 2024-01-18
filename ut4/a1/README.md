@@ -31,7 +31,7 @@ Instalar y configurar PostgreSQL y pgAdmin, desarrollar una aplicación para mos
 - Nginx
 - [Datos empleados](https://github.com/sdelquin/dpl/blob/main/ut4/files/places.csv)
 - Python
-- Intalación y configuración PHP+nginx
+- Instalación y configuración PHP+nginx
 
 #### ***Desarrollo***. <a name="id4"></a>
 *** Aclaración: Los pasos de instalación son comunes para la máquina de desarrollo y producción ***
