@@ -89,7 +89,8 @@ Creamos el virtual host en nginx ``` sudo nano /etc/nginx/conf.d/pgadmin.conf ``
 
 ![Imagen12](img/12.png)  
 
-####### Demonizar el servicio
+###### Demonizar el servicio  
+
 Creamos un servicio del sistema ``` sudo nano /etc/systemd/system/pgadmin.service ``` con el siguiente contenido:
 
 ![Imagen13](img/13.png)  
