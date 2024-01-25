@@ -23,7 +23,8 @@ Instalamos el gestor y algunas dependencias:
 ``` npm install pg ```  
 ``` npm install dotenv ```  
 Creamos un .env.example con la estructura de la cadena de conexión a la base de datos y copiamos dicho archivo en un .env reemplazando por los datos sensibles.  
-``` echo 'PSQL_CONNECTION=postgresql://ejemplo_usuario:ejemplo_contraseña@localhost:puerto' > .env.example
+```
+echo 'PSQL_CONNECTION=postgresql://ejemplo_usuario:ejemplo_contraseña@localhost:puerto' > .env.example
  ```  
 creamos el archivo con para la conexión con la base de datos  
 ``` mkdir config && nano config/database.js ```  
