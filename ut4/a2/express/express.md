@@ -28,23 +28,23 @@ Creamos un .env.example con la estructura de la cadena de conexión a la base de
 creamos el archivo con para la conexión con la base de datos  
 ``` mkdir config && nano config/database.js ```  
 con el siguiente contenido:  
-[imagen1](1.png)   
+![imagen1](img/1.png)   
 modificamos las rutas:  
 ``` nano routes/index.js ```  
 con el siguiente contenido:  
-[imagen2](2.png)  
+![imagen2](img/2.png)  
 creamos la vista principal:  
 ``` nano views/index.pug ```  
 con el siguiente contenido:  
-[imagen3](3.png)  
+![imagen3](img/3.png)  
 creamos la vista wished:  
 ``` nano views/wished.pug ```  
 contenido:  
-[imagen4](4.png)  
+![imagen4](img/4.png)  
 creamos la vista visited:  
 ``` nano views/visited.pug ```  
 contenido:  
-[imagen5](5.png)  
+![imagen5](img/5.png)  
 Instalamos un gestor de procesos  
 ```  sudo npm install -g pm2 ```  
 lanzamos un proceso en background (estando en la carpeta de la aplicación)  
@@ -52,7 +52,7 @@ lanzamos un proceso en background (estando en la carpeta de la aplicación)
 creamos un travelroad_express.conf en /etc/nginx/conf.d/ :  
 ``` sudo nano /etc/nginx/conf.d/travelroad.conf```  
 Contenido:  
-[imagen6](6.png)  
+![imagen6](img/6.png)  
 script de despliegue (deploy.sh):  
 ```
 #!/bin/bash
@@ -89,6 +89,6 @@ server{
 aplicamos el cerbot al numero que corresponda:
 ``` sudo certbot --nginx ```  
 Resultado final:  
-[imagen7](7.png)  
-y nos redirecciona a:
-[imagen8](8.png)  
+![imagen7](img/7.png)  
+y nos redirecciona a:  
+![imagen8](img/8.png)  
