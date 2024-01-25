@@ -41,13 +41,13 @@ Volvemos a la raíz del proyecto y cambiamos routes/web.php con el siguiente con
 Creamos travelroad_laravel.conf en /etc/nginx/conf.d con el siguiente contenido:  
 ![imagen](img/7.png)  
 
-Creamos un script para conectarse y actualizar la máquina de producción:
+Creamos un script para conectarse y actualizar la máquina de producción:  
 ![imagen](img/8.png)  
 
 En la máquina de producción bajamos y movemos a la ruta correspondiente el repositorio, creamos un .env a partir del .env.example modificando los valores por los que queramos usar en producción y generamos una app_key con ``` php artisan key:generate ```, creamos el .conf con el server_name "laravel.nuhazet.arkania.es", hacemos un cambio en desarrollo (añadimos - Changed al h1 de la vista travelroad) y ejecutamos el script. Nos conectamos para comprobar que todo funciona:  
 ![imagen](img/9.png)  
 
-Ahora agregamos el certificado usando certbot ``` sudo certbot --nginx ``` y seleccionamos el número que corresponda a laravel.nuhazet.arkania.es. Luego creamos otro .conf para la redireccion www con el siguiente contenido:  
+Ahora agregamos el certificado usando certbot ``` sudo certbot --nginx ``` y seleccionamos el número que corresponda a laravel.nuhazet.arkania.es. Luego creamos otro .conf para la redireccion www con el siguiente contenido:   
 ![imagen](img/10.png)  
 y le agregamos el certbot ejecutando el mismo comando pero seleccionando el número correspondiente.
 Quedaría tal que así:  
