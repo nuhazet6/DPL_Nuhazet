@@ -12,47 +12,105 @@
 
 ## ***Desarrollo***. <a name="id2"></a>
 ### Instalación
-``` curl -O --output-dir /tmp \
-https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz ```  
-``` sudo tar -xzvf /tmp/openjdk-19.0.1_linux-x64_bin.tar.gz \
---one-top-level=/usr/lib/jvm ```  
+```
+curl -O --output-dir /tmp \
+https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz
+```  
+
+```
+sudo tar -xzvf /tmp/openjdk-19.0.1_linux-x64_bin.tar.gz \
+--one-top-level=/usr/lib/jvm
+```  
+
 extablecemos la variables de entorno:  
-``` sudo nano /etc/profile.d/jdk_home.sh ```  
+``` 
+sudo nano /etc/profile.d/jdk_home.sh
+```  
+
 Contenido:  
 ``` #!/bin/sh
 export JAVA_HOME=/usr/lib/jvm/jdk-19.0.1/
-export PATH=$JAVA_HOME/bin:$PATH ```  
-``` sudo update-alternatives --install \
-"/usr/bin/java" "java" "/usr/lib/jvm/jdk-19.0.1/bin/java" 0 ```  
-``` sudo update-alternatives --install \
-"/usr/bin/javac" "javac" "/usr/lib/jvm/jdk-19.0.1/bin/javac" 0 ```  
-``` sudo update-alternatives --set java \
-/usr/lib/jvm/jdk-19.0.1/bin/java ```  
-``` sudo update-alternatives --set javac \
-/usr/lib/jvm/jdk-19.0.1/bin/javac ```  
-``` sudo apt install -y zip ```  
-``` curl -s https://get.sdkman.io | bash ```  
-``` source "$HOME/.sdkman/bin/sdkman-init.sh" ```  
-``` sdk install springboot ```  
-``` sdk install maven ```
+export PATH=$JAVA_HOME/bin:$PATH
+```  
+
+```
+sudo update-alternatives --install \
+"/usr/bin/java" "java" "/usr/lib/jvm/jdk-19.0.1/bin/java" 0
+```  
+
+```
+sudo update-alternatives --install \
+"/usr/bin/javac" "javac" "/usr/lib/jvm/jdk-19.0.1/bin/javac" 0
+```
+
+```
+sudo update-alternatives --set java \
+/usr/lib/jvm/jdk-19.0.1/bin/java
+```  
+
+```
+sudo update-alternatives --set javac \
+/usr/lib/jvm/jdk-19.0.1/bin/javac
+```  
+
+``` 
+sudo apt install -y zip
+```  
+
+``` 
+curl -s https://get.sdkman.io | bash
+```  
+
+``` 
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+```  
+
+``` 
+sdk install springboot
+```  
+
+``` 
+sdk install maven
+```  
+
 ### Aplicación
-``` spring init \
+```
+spring init \
 --build=maven \
 --dependencies=web \
 --group=edu.dpl \
 --name=travelroad \
 --description=TravelRoad \
-travelroad_spring ```
+travelroad_spring
+```
+
 dentro de travel_spring:
-``` mkdir -p src/main/java/edu/dpl/travelroad/controllers ```  
-``` touch src/main/java/edu/dpl/travelroad/controllers/HomeController.java ```  
-``` mkdir -p src/main/java/edu/dpl/travelroad/models ```  
-```  touch src/main/java/edu/dpl/travelroad/models/Place.java ```  
-``` mkdir -p src/main/java/edu/dpl/travelroad/repositories ```  
-``` touch src/main/java/edu/dpl/travelroad/repositories/PlaceRepository.java ```  
-``` touch src/main/resources/templates/home.html ```
+``` 
+mkdir -p src/main/java/edu/dpl/travelroad/controllers
+```  
+``` 
+touch src/main/java/edu/dpl/travelroad/controllers/HomeController.java
+```  
+``` 
+mkdir -p src/main/java/edu/dpl/travelroad/models
+```  
+```  
+touch src/main/java/edu/dpl/travelroad/models/Place.java
+```  
+``` 
+mkdir -p src/main/java/edu/dpl/travelroad/repositories
+```  
+``` 
+touch src/main/java/edu/dpl/travelroad/repositories/PlaceRepository.java
+```  
+``` 
+touch src/main/resources/templates/home.html
+```  
 Modificamos el controlador:
-``` nano src/main/java/edu/dpl/travelroad/controllers/HomeController.java ```  
+``` 
+nano src/main/java/edu/dpl/travelroad/controllers/HomeController.java
+```
+Contenido:  
 ```
 package edu.dpl.travelroad.controllers;
 
@@ -89,8 +147,176 @@ public class HomeController {
         return "visited";  // visited.html
     }
 }
- ```  
-```  ```  
-```  ``` 
+```  
+Modelos:  
+```
+nano src/main/java/edu/dpl/travelroad/models/Place.java
+```  
+```
+package edu.dpl.travelroad.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "places")
+public class Place {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String name;
+    private Boolean visited;
+
+    public Place() {
+    }
+
+    public Place(Long id, String name, Boolean visited) {
+
+        this.id = id;
+        this.name = name;
+        this.visited = visited;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getVisited() {
+        return visited;
+    }
+
+    public void setVisited(Boolean visited) {
+        this.visited = visited;
+    }
+}
+```
+Repositorio
+```
+nano src/main/java/edu/dpl/travelroad/repositories/PlaceRepository.java
+```
+Contenido:  
+```
+package edu.dpl.travelroad.repositories;
+
+import edu.dpl.travelroad.models.Place;
+
+import java.util.List;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+
+@Repository
+public interface PlaceRepository extends CrudRepository<Place, Long> {
+
+    @Query("SELECT p FROM Place p WHERE p.visited = ?1")
+    List<Place> findByVisited(Boolean visited);
+}
+```  
+Plantillas:  
+```
+nano src/main/resources/templates/home.html
+```  
+Contenido:  
+![imagen1](img/1.png)  
+```
+nano src/main/resources/templates/wished.html
+```  
+Contenido:  
+![Imagen2](img/2.png)  
+```
+nano src/main/resources/templates/visited.html
+```  
+Contenido:  
+![Imagen3](img/3.png)  
+Dependencias
+``` 
+nano pom.xml
+```  
+Contenido:  
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>edu.dpl</groupId>
+	<artifactId>travelroad</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>travelroad</name>
+	<description>TravelRoad</description>
+	<properties>
+		<java.version>19</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+        <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+ ```
+Credenciales  
+``` 
+nano src/main/resources/application.properties
+```  
+Contenido:  
+``` 
+spring.datasource.url=jdbc:postgresql://localhost:5432/travelroad
+spring.datasource.username=travelroad_user
+spring.datasource.password=dpl10000
+```  
+```
+./mvnw compile
+```  
+``` ```  
+``` ```  
