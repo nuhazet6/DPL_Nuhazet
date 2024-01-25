@@ -26,7 +26,7 @@ Creamos un .env.example con la estructura de la cadena de conexión a la base de
 ```
 echo 'PSQL_CONNECTION=postgresql://ejemplo_usuario:ejemplo_contraseña@localhost:puerto' > .env.example
  ```  
-creamos el archivo con para la conexión con la base de datos  
+creamos el archivo para la conexión con la base de datos  
 ``` mkdir config && nano config/database.js ```  
 con el siguiente contenido:  
 ![imagen1](img/1.png)   
@@ -48,10 +48,10 @@ contenido:
 ![imagen5](img/5.png)  
 Instalamos un gestor de procesos  
 ```  sudo npm install -g pm2 ```  
-lanzamos un proceso en background (estando en la carpeta de la aplicación)  
+Lanzamos un proceso en background (estando en la carpeta de la aplicación)  
 ``` pm2 start ./bin/www --name travelroad_express ```  
 creamos un travelroad_express.conf en /etc/nginx/conf.d/ :  
-``` sudo nano /etc/nginx/conf.d/travelroad.conf```  
+``` sudo nano /etc/nginx/conf.d/travelroad_express.conf```  
 Contenido:  
 ![imagen6](img/6.png)  
 script de despliegue (deploy.sh):  
