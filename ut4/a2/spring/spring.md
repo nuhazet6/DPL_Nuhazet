@@ -79,43 +79,43 @@ spring init \
 --build=maven \
 --dependencies=web \
 --group=edu.dpl \
---name=travelroad \
---description=TravelRoad \
+--name=travelroad_spring \
+--description=TravelRoad_Spring \
 travelroad_spring
 ```
 
 dentro de travel_spring:
 ``` 
-mkdir -p src/main/java/edu/dpl/travelroad/controllers
+mkdir -p src/main/java/edu/dpl/travelroad_spring/controllers
 ```  
 ``` 
-touch src/main/java/edu/dpl/travelroad/controllers/HomeController.java
+touch src/main/java/edu/dpl/travelroad_spring/controllers/HomeController.java
 ```  
 ``` 
-mkdir -p src/main/java/edu/dpl/travelroad/models
+mkdir -p src/main/java/edu/dpl/travelroad_spring/models
 ```  
 ```  
-touch src/main/java/edu/dpl/travelroad/models/Place.java
-```  
-``` 
-mkdir -p src/main/java/edu/dpl/travelroad/repositories
+touch src/main/java/edu/dpl/travelroad_spring/models/Place.java
 ```  
 ``` 
-touch src/main/java/edu/dpl/travelroad/repositories/PlaceRepository.java
+mkdir -p src/main/java/edu/dpl/travelroad_spring/repositories
+```  
+``` 
+touch src/main/java/edu/dpl/travelroad_spring/repositories/PlaceRepository.java
 ```  
 ``` 
 touch src/main/resources/templates/home.html
 ```  
 Modificamos el controlador:
 ``` 
-nano src/main/java/edu/dpl/travelroad/controllers/HomeController.java
+nano src/main/java/edu/dpl/travelroad_spring/controllers/HomeController.java
 ```
 Contenido:  
 ```
-package edu.dpl.travelroad.controllers;
+package edu.dpl.travelroad_spring.controllers;
 
-import edu.dpl.travelroad.models.Place;
-import edu.dpl.travelroad.repositories.PlaceRepository;
+import edu.dpl.travelroad_spring.models.Place;
+import edu.dpl.travelroad_spring.repositories.PlaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -132,8 +132,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("wished", placeRepository.findByVisited(false));
-        model.addAttribute("visited", placeRepository.findByVisited(true));
         return "home";  // home.html
     }
     @GetMapping("/wished")
@@ -150,10 +148,10 @@ public class HomeController {
 ```  
 Modelos:  
 ```
-nano src/main/java/edu/dpl/travelroad/models/Place.java
+nano src/main/java/edu/dpl/travelroad_spring/models/Place.java
 ```  
 ```
-package edu.dpl.travelroad.models;
+package edu.dpl.travelroad_spring.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -205,13 +203,13 @@ public class Place {
 ```
 Repositorio
 ```
-nano src/main/java/edu/dpl/travelroad/repositories/PlaceRepository.java
+nano src/main/java/edu/dpl/travelroad_spring/repositories/PlaceRepository.java
 ```
 Contenido:  
 ```
-package edu.dpl.travelroad.repositories;
+package edu.dpl.travelroad_spring.repositories;
 
-import edu.dpl.travelroad.models.Place;
+import edu.dpl.travelroad_spring.models.Place;
 
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
@@ -258,10 +256,10 @@ Contenido:
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.dpl</groupId>
-	<artifactId>travelroad</artifactId>
+	<artifactId>travelroad_spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>travelroad</name>
-	<description>TravelRoad</description>
+	<name>travelroad_spring</name>
+	<description>travelroad_spring</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
@@ -316,7 +314,70 @@ spring.datasource.username=travelroad_user
 spring.datasource.password=dpl10000
 ```  
 ```
-./mvnw compile
+./mvnw compile  
 ```  
-``` ```  
-``` ```  
+```
+./mvnw package
+```  
+``` 
+nano run.sh
+```  
+Contenido:  
+``` 
+#!/bin/bash
+
+cd $(dirname $0)
+
+./mvnw package  # el empaquetado ya incluye la compilación
+
+# ↓ Último fichero JAR generado
+JAR=`ls target/*.jar -t | head -1`
+/usr/bin/java -jar $JAR
+```  
+``` 
+chmod +x run.sh
+```
+``` 
+mkdir -p ~/.config/systemd/user
+nano ~/.config/systemd/user/travelroad_spring.service
+```  
+Contenido:  
+``` 
+[Unit]
+Description=Spring Boot TravelRoad
+
+[Service]
+Type=simple
+StandardOutput=journal
+ExecStart=/home/pc19-dpl/travelroad_spring/run.sh
+
+[Install]
+WantedBy=default.target
+```  
+``` 
+systemctl --user enable travelroad_spring.service
+```  
+``` 
+systemctl --user start travelroad_spring.service
+```  
+Configuración Nginx:  
+``` 
+sudo nano /etc/nginx/conf.d/travelroad_spring.conf
+```  
+``` 
+server {
+    server_name spring.local;
+
+    location / {
+        proxy_pass http://localhost:8080;  # socket TCP
+    }
+}
+```
+``` 
+sudo systemctl reload nginx
+```  
+``` 
+
+```  
+
+
