@@ -372,12 +372,54 @@ server {
         proxy_pass http://localhost:8080;  # socket TCP
     }
 }
-```
+```  
 ``` 
 sudo systemctl reload nginx
 ```  
+Creamos el script para despliegue:  
 ``` 
-
+nano deploy.sh
 ```  
+Contenido:  
+```
+#!/bin/bash
 
+ssh nuhazet@nuhazet.arkania.es "
+  cd travelroad_spring
+  git pull
+  systemctl --user restart travelroad_spring.service
+  
+"
+```  
+```
+chmod +x deploy.sh
+```  
+Ahora, debemos  descargar el repositorio en la máquina de producción y repetir todos los pasos necesarios (instalación, creación del servicio(tener en cuenta de cambiarle la ruta), etc), una vez hecho esto ejecutamos el script deploy en la máquina de desarrollo, acto seguido configuramos el .conf de la máquina de producción:  
+```
+server {
+    server_name spring.nuhazet.arkania.es;
 
+    location / {
+        proxy_pass http://localhost:8080;  # socket TCP
+    }
+}
+```  
+Creamos los certificados:  
+```
+sudo certbot --nginx
+```  
+Hacemos la redirección www:  
+```
+server {
+    listen 80;
+    server_name www.spring.nuhazet.arkania.es;
+    return 301 https://spring.nuhazet.arkania.es$request_uri;
+}
+```  
+Instalamos el certificado del www:  
+```
+sudo certbot --nginx
+```
+Resultado:  
+![imagen4](4.png)  
+![imagen4](5.png)  
