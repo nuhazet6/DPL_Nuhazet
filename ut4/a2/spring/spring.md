@@ -421,5 +421,5 @@ Instalamos el certificado del www:
 sudo certbot --nginx
 ```
 Resultado:  
-![imagen4](4.png)  
-![imagen4](5.png)  
+![imagen4](img/4.png)  
+![imagen5](img/5.png)  
