@@ -241,7 +241,7 @@ sudo groupadd supervisor
 ```  
 Configuración de supervisor:  
 ```
-nano /etc/supervisor/supervisord.conf
+sudo nano /etc/supervisor/supervisord.conf
 ```  
 Contenido:  
 ```
@@ -273,7 +273,7 @@ gunicorn -b unix:/tmp/travelroad.sock main.wsgi:application
 chmod +x run.sh
 ```  
 ```
-sudo nano /etc/supervisor/conf.d/travelroad.conf
+sudo nano /etc/supervisor/conf.d/travelroad.conf 
 ```  
 Contenido:  
 ```
@@ -288,12 +288,13 @@ stderr_logfile = /var/log/supervisor/travelroad.err.log
 stdout_logfile = /var/log/supervisor/travelroad.out.log
 ```  
 ```
-supervisorctl add travelroad
+supervisorctl add travelroad (reiniciando también se activa)
 ```  
 Nginx:
 ```
-nano /etc/nginx/conf.d/travelroad_django.conf
+sudo nano /etc/nginx/conf.d/travelroad_django.conf
 ```  
+Contenido:  
 ```
 server {
     server_name django.local;
@@ -333,7 +334,7 @@ ssh nuhazet@nuhazet.arkania.es "
 "
 ```  
 ```
-chmod +x deploy.shg
+chmod +x deploy.sh
 ```  
 ```
 
@@ -364,20 +365,24 @@ Cuando nos vayamos al entorno de producción hay que realizar una serie de pasos
     5. Montar el servidor de aplicación.  
     6. Configurar el virtual host para Nginx.  
     7. Preparar el script de despliegue.  
-
+Por lo tanto, ponemos certificado:  
 ```
-places/views.py
+sudo certbot --nginx
 ```  
+Creamos la redirección www:  
 ```
-
+server {
+    listen 80;
+    server_name www.django.nuhazet.arkania.es;
+    return 301 https://django.nuhazet.arkania.es$request_uri;
+}
 ```  
+Certificado:  
 ```
-
-```  
+sudo certbot --nginx
 ```
-
-```  
-
-
+Resultado:  
+![Imagen1](img/1.png)  
+![Imagen2](img/2.png)  
 
 
