@@ -98,7 +98,7 @@ from .models import Place
 
 def index(request):
     template = loader.get_template('places/index.html')    
-    return HttpResponse(template.render(request))
+    return HttpResponse(template.render(request=request))
 
 def wished(request):
     wished = Place.objects.filter(visited=False)
@@ -230,15 +230,143 @@ DB_NAME='travelroad'
 DB_USERNAME='travelroad_user'
 DB_PASSWORD='dpl10000'
 ```  
+```
+pip install gunicorn
+```  
+```
+sudo apt install -y supervisor
+```  
+```
+sudo groupadd supervisor
+```  
+Configuración de supervisor:  
+```
+nano /etc/supervisor/supervisord.conf
+```  
+Contenido:  
+```
+...
+chmod=0770               ; socket file mode (default 0700)
+chown=root:supervisor    ; grupo 'supervisor' para usuarios no privilegiados
+...
+```  
+```
+sudo systemctl restart supervisor
+```  
+```
+sudo usermod -a -G supervisor pc19-dpl
+```  
+Para que el cambio de grupo sea efectivo, HABRÁ QUE SALIR Y VOLVER A ENTRAR EN LA SESIÓN.  
+Fichero inicio:  
+```
+nano run.sh
+```  
+Contenido:  
+```
+#!/bin/bash
+
+cd $(dirname $0)
+source .venv/bin/activate
+gunicorn -b unix:/tmp/travelroad.sock main.wsgi:application
+```  
+```
+chmod +x run.sh
+```  
+```
+sudo nano /etc/supervisor/conf.d/travelroad.conf
+```  
+Contenido:  
+```
+[program:travelroad]
+user = pc19-dpl
+command = /home/pc19-dpl/travelroad_django/run.sh
+autostart = true
+autorestart = true
+stopsignal = INT
+killasgroup = true
+stderr_logfile = /var/log/supervisor/travelroad.err.log
+stdout_logfile = /var/log/supervisor/travelroad.out.log
+```  
+```
+supervisorctl add travelroad
+```  
+Nginx:
+```
+nano /etc/nginx/conf.d/travelroad_django.conf
+```  
+```
+server {
+    server_name django.local;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/tmp/travelroad.sock;  # socket UNIX
+    }
+}
+```  
+Tener en cuenta que la ruta del socket tiene que coincidir con el script de servicio run.sh  
+```
+sudo systemctl reload nginx
+```
+```
+supervisorctl restart travelroad
+```  
+Script de deploy:  
+```
+nano deploy.sh
+```  
+Contenido:  
+```
+#!/bin/bash
+
+ssh nuhazet@nuhazet.arkania.es "
+  cd travelroad_django
+  git pull
+
+  source .venv/bin/activate
+  pip install -r requirements.txt
+
+  # python manage.py migrate
+  # python manage.py collectstatic --no-input
+
+  supervisorctl restart travelroad
+"
+```  
+```
+chmod +x deploy.shg
+```  
+```
+
+```  
+
+
+
 Especificar requerimientos:  
 ```
 nano requirements.txt
 ```  
+Contenido:  
 ```
-
+django
+psycopg2-binary
+prettyconf
+gunicorn
 ```  
-```
 
+
+
+Cuando nos vayamos al entorno de producción hay que realizar una serie de pasos:
+
+    1. Clonar el repositorio git.  
+    2. Crear el entorno virtual (tal y como se ha visto).  
+    3. Instalar las dependencias.  
+    4. Fijar parámetros para el entorno de producción.  
+    5. Montar el servidor de aplicación.  
+    6. Configurar el virtual host para Nginx.  
+    7. Preparar el script de despliegue.  
+
+```
+places/views.py
 ```  
 ```
 
